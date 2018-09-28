@@ -2,36 +2,7 @@ const bcrypt = require('bcrypt-nodejs');
 const SALT_WORK_FACTOR = 12;
 
 const UserModel = function(db, DataTypes){
-    const User = db.define('users', {
-        username : {
-            type : DataTypes.STRING,
-            unique : true,
-            validate : {
-                notEmpty :true,
-                // ENABLE WHEN READY
-                // isUnique : function(value, next){
-                //     User.find({
-                //         where: {username: value},
-                //         attributes: ['id']
-                //     })
-                //     .done(function(error, user) {
-                //         if (error){
-                //             // Some unexpected error occured with the find method.
-                //             return next(error);
-                //         }
-                //         if (user){
-                //             // We found a user with this email address.
-                //             // Pass the error to the next method.
-                //             return next('Username already in use!');
-                //         }
-                //         // If we got this far, the email address hasn't been used yet.
-                //         // Call next with no arguments when validation is successful.
-                //         next();
-                //     });
-    
-                // }
-            }
-        },
+    const User = db.define('Users', {
         email : {
             type : DataTypes.STRING,
             unique : true,
@@ -68,7 +39,7 @@ const UserModel = function(db, DataTypes){
             }
         },
         publicEthKey : {
-            type : DataTypes.TEXT,
+            type : DataTypes.CHAR,
             //validate : { notEmpty :true }
         },
         // validPassword : function(password, passwd, done, user){
@@ -102,7 +73,31 @@ const UserModel = function(db, DataTypes){
 
 }
 
-module.exports = UserModel;
+const TransactionModel = function(db, DataTypes){
+    const Transaction = db.define('Transactions', {
+        sender : {
+            type : DataTypes.CHAR,
+            validate : {
+                notEmpty :true
+            }
+        },
+        receiver : {
+            type : DataTypes.CHAR,
+            validate : {
+                notEmpty :true
+            }
+        },
+        transactionHash : {
+            type : DataTypes.CHAR,
+            unique : true,
+            validate : {
+                notEmpty :true
+            }
+        }
+    });
+    return Transaction;
+}
+module.exports = { UserModel, TransactionModel};
 
 
 
