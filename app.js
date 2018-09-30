@@ -57,7 +57,7 @@ module.exports = function(app){
         key: process.env.NODE_ENV === 'production' ? '__cfduid' : 'sid',
         secret: '1123ddsgfdrtrthsds',
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         proxy : true, // add this when behind a reverse proxy, if you need secure cookies
         cookie: {
         secure: process.env.NODE_ENV === 'production' ? true : false, // Secure is Recommeneded, However it requires an HTTPS enabled website (SSL Certificate)
@@ -145,7 +145,7 @@ module.exports = function(app){
                 console.log('Error retrieving session - ', err);
                 return res.json({
                 error: "Error retrieving session ",
-                loggedIn : false,
+                isAuthenticated : false,
                 requestType : 'POST',
                 success : false
                 });
@@ -156,7 +156,7 @@ module.exports = function(app){
             console.log('No user found...');
             return res.json({
                 error: "No user found...",
-                loggedIn : false,
+                isAuthenticated : false,
                 requestType : 'POST',
                 success : false
             });
@@ -174,11 +174,12 @@ module.exports = function(app){
                 sessionId : req.sessionID,
                 user : user.email,
                 publicEthKey : user.dataValues.publicEthKey,
-                loggedIn : true,
+                isAuthenticated : true,
                 requestType : 'POST',
                 success : true
                 });
                 next();
+                
             });
 
 
@@ -190,11 +191,11 @@ module.exports = function(app){
         req.session.destroy(((err)=>{
             if(err){
                 console.log('Error destroying session - ', err);
-                res.json({error : err, loggedIn : true, requestType : 'GET', success : false});
+                res.json({error : err, isAuthenticated : true, requestType : 'GET', success : false});
             }
         }));
         req.logout();
-        res.json({loggedIn : false, requestType : 'GET', success : true});
+        res.json({isAuthenticated : false, requestType : 'GET', success : true});
     });
     /*
     * Check the request if the user is authenticated.
@@ -261,7 +262,10 @@ module.exports = function(app){
             attributes:['transactionHash']
             })
             .then((transactions, error)=>{
-                res.status(200).send(transactions);
+                const transArray = transactions.map((t)=>{
+                    return t.transactionHash;
+                });
+                res.status(200).send(transArray);
                 next();
             });
         });
@@ -275,6 +279,9 @@ module.exports = function(app){
             attributes:['transactionHash']
             })
             .then((transactions, error)=>{
+                const transArray = transactions.map((t)=>{
+                    return t.transactionHash;
+                });
                 res.status(200).send(transactions);
                 next();
             });
