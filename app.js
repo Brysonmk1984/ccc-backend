@@ -179,7 +179,6 @@ module.exports = function(app){
                 success : true
                 });
                 next();
-                
             });
 
 
@@ -282,7 +281,7 @@ module.exports = function(app){
                 const transArray = transactions.map((t)=>{
                     return t.transactionHash;
                 });
-                res.status(200).send(transactions);
+                res.status(200).send(transArray);
                 next();
             });
         });
