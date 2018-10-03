@@ -254,37 +254,55 @@ module.exports = function(app){
 
         // POST - RETRIEVE SENT TRANSACTIONS
         app.post('/retrieve-sent-hashes', function(req, res, next){
+            console.log('LOOK', req.body.address);
             transaction.findAll({
             where : {
-                sender : req.body.address
+                sender : req.body.address.toLowerCase()
             },
-            attributes:['transactionHash']
+            attributes:['transactionHash', 'createdAt']
             })
             .then((transactions, error)=>{
                 const transArray = transactions.map((t)=>{
-                    return t.transactionHash;
+                    return {hash: t.transactionHash, timestamp: t.createdAt};
                 });
                 res.status(200).send(transArray);
                 next();
             });
         });
 
-        // POST - RETRIEVE SENT TRANSACTIONS
+        // POST - RETRIEVE RECEIVED TRANSACTIONS
         app.post('/retrieve-received-hashes', function(req, res, next){
             transaction.findAll({
             where : {
-                receiver : req.body.address
+                receiver : req.body.address.toLowerCase()
             },
-            attributes:['transactionHash']
+            attributes:['transactionHash', 'createdAt']
             })
             .then((transactions, error)=>{
                 const transArray = transactions.map((t)=>{
-                    return t.transactionHash;
+                    return {hash: t.transactionHash, timestamp: t.createdAt};
                 });
                 res.status(200).send(transArray);
                 next();
             });
         });
+
+        // POST - SAVE NEW TRANSACTION TO DB
+        app.post('/save-new-hash', function(req, res, next){
+            transaction.create({
+                sender : req.body.from,
+                receiver : req.body.to,
+                transactionHash : req.body.hash
+            })
+            .then((data) =>{
+                console.log(data);
+                res.status(200).send(data);
+                next();
+            })
+        });
+
+
+
     };
 
 
