@@ -172,7 +172,7 @@ module.exports = function(app){
             }).then((user, err) => {
                 res.json({
                 sessionId : req.sessionID,
-                user : user.email,
+                email : u.email,
                 publicEthKey : user.dataValues.publicEthKey,
                 isAuthenticated : true,
                 requestType : 'POST',
@@ -226,31 +226,33 @@ module.exports = function(app){
             res.status(200).send({
             success: true,
             message: `You are logged in as ${req.user}`,
+            email: req.user,
             publicEthKey: user.dataValues.publicEthKey,
             requestType : 'GET'
             });
             next();
         });
     });
-        app.get('/account-details', function(req, res, next){
-            user.find({
-            where : {
-            email : req.user
-            },
-            attributes:['publicEthKey', 'username', 'createdAt', 'email']
-            })
-            .then((user, error)=>{
-                res.status(200).send({
-                    success: true,
-                    message: `You are logged in as ${req.user}`,
-                    publicEthKey: user.dataValues.publicEthKey,
-                    email: user.dataValues.email,
-                    createdAt: user.dataValues.createdAt,
-                    requestType : 'GET'
-                });
-                next();
-                });
-            });
+
+    // app.get('/account-details', function(req, res, next){
+    //     user.find({
+    //         where : {
+    //             email : req.user
+    //         },
+    //         attributes:['publicEthKey', 'createdAt', 'email']
+    //     })
+    //     .then((user, error)=>{
+    //         res.status(200).send({
+    //             success: true,
+    //             message: `You are logged in as ${req.user}`,
+    //             publicEthKey: user.dataValues.publicEthKey,
+    //             email: user.dataValues.email,
+    //             createdAt: user.dataValues.createdAt,
+    //             requestType : 'GET'
+    //         });
+    //         next();
+    //     });
+    // });
 
         // POST - RETRIEVE SENT TRANSACTIONS
         app.post('/retrieve-sent-hashes', function(req, res, next){
