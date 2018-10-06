@@ -1,8 +1,12 @@
+// NODE
 const path = require('path');
+// LIBRARIES
 const express = require('express');
 const cors = require('cors')
-// sequelize
 const Sequelize = require('sequelize');
+// COMMON
+const transactions = require('./routes/transactions');
+
 const dbUrl = process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : "postgres://admin:admin@localhost/dcoin";
 const sequelizeSettings = {
     dialect: 'postgres',
@@ -68,12 +72,7 @@ module.exports = function(app){
     }));
     app.use(passport.initialize());
     app.use(passport.session());
-    //app.use(flash());
-    // app.use(function(req,res,next){
-    // //console.log('IS AUTHENTICATED - ', req.isAuthenticated());
-    // res.locals.isAuthenticated = req.isAuthenticated();
-    // next();
-    // });
+    
     passport.use(new LocalStrategy({
     usernameField:'email', passwordField:'password'
     },
@@ -105,6 +104,7 @@ module.exports = function(app){
     });
     }
     ));
+    app.use('/transactions', transactions);
     // REGISTER NEW ACCOUNT
     app.post('/register', [
         checkBody('email', 'The email you entered is invalid, please try again.').isEmail(),
@@ -234,74 +234,7 @@ module.exports = function(app){
         });
     });
 
-    // app.get('/account-details', function(req, res, next){
-    //     user.find({
-    //         where : {
-    //             email : req.user
-    //         },
-    //         attributes:['publicEthKey', 'createdAt', 'email']
-    //     })
-    //     .then((user, error)=>{
-    //         res.status(200).send({
-    //             success: true,
-    //             message: `You are logged in as ${req.user}`,
-    //             publicEthKey: user.dataValues.publicEthKey,
-    //             email: user.dataValues.email,
-    //             createdAt: user.dataValues.createdAt,
-    //             requestType : 'GET'
-    //         });
-    //         next();
-    //     });
-    // });
-
-        // POST - RETRIEVE SENT TRANSACTIONS
-        app.post('/retrieve-sent-hashes', function(req, res, next){
-            console.log('LOOK', req.body.address);
-            transaction.findAll({
-            where : {
-                sender : req.body.address.toLowerCase()
-            },
-            attributes:['transactionHash', 'createdAt']
-            })
-            .then((transactions, error)=>{
-                const transArray = transactions.map((t)=>{
-                    return {hash: t.transactionHash, timestamp: t.createdAt};
-                });
-                res.status(200).send(transArray);
-                next();
-            });
-        });
-
-        // POST - RETRIEVE RECEIVED TRANSACTIONS
-        app.post('/retrieve-received-hashes', function(req, res, next){
-            transaction.findAll({
-            where : {
-                receiver : req.body.address.toLowerCase()
-            },
-            attributes:['transactionHash', 'createdAt']
-            })
-            .then((transactions, error)=>{
-                const transArray = transactions.map((t)=>{
-                    return {hash: t.transactionHash, timestamp: t.createdAt};
-                });
-                res.status(200).send(transArray);
-                next();
-            });
-        });
-
-        // POST - SAVE NEW TRANSACTION TO DB
-        app.post('/save-new-hash', function(req, res, next){
-            transaction.create({
-                sender : req.body.from,
-                receiver : req.body.to,
-                transactionHash : req.body.hash
-            })
-            .then((data) =>{
-                console.log(data);
-                res.status(200).send(data);
-                next();
-            })
-        });
+        
 
 
 
@@ -309,10 +242,16 @@ module.exports = function(app){
 
 
 
-
+    // Gets information from the user object and serilizes it in a session
+    // Happends when a user logs in
     passport.serializeUser(function(userId, done) {
+        // userId in this case is the user email
+        // accessible in routes by req.session.passport.userId
         done(null, userId);
     });
+    
+    // Turns the serilized user object back into a JS user object for use in the rest of the code
+    // Happends any time a user visists a page that makes a call to the backend
     passport.deserializeUser(function(userId, done) {
     done(null, userId);
 });
