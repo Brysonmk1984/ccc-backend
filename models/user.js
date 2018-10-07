@@ -8,7 +8,6 @@ const UserModel = function(db, DataTypes){
             unique : true,
             validate : {
                 notEmpty :true,
-                // ENABLE WHEN READY
                 isUnique : function(value, next){
                     User.find({
                         where: {email: value},
@@ -65,39 +64,8 @@ const UserModel = function(db, DataTypes){
             });
         });
     })
-        
-       
-
 
     return User;
+};
 
-}
-
-const TransactionModel = function(db, DataTypes){
-    const Transaction = db.define('Transactions', {
-        sender : {
-            type : DataTypes.CHAR,
-            validate : {
-                notEmpty :true
-            }
-        },
-        receiver : {
-            type : DataTypes.CHAR,
-            validate : {
-                notEmpty :true
-            }
-        },
-        transactionHash : {
-            type : DataTypes.CHAR,
-            unique : true,
-            validate : {
-                notEmpty :true
-            }
-        }
-    });
-    return Transaction;
-}
-module.exports = { UserModel, TransactionModel};
-
-
-
+module.exports = UserModel;

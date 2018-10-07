@@ -1,7 +1,7 @@
 {
-  "name": "eco-allies-login",
+  "name": "dcoin-backend",
   "version": "1.0.0",
-  "description": "Eco Allies Website Login backend",
+  "description": "Dcoin backend that handles login and saving & retrieving transaction hashes",
   "main": "index.js",
   "scripts": {
     "test": "eslint index.js && mocha",
