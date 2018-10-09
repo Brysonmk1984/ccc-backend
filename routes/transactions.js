@@ -2,15 +2,16 @@
 const express = require('express');
 const router = express.Router(); 
 const Transaction = require('../db').Transaction;
+const db = require('../db').db;
 
 // POST - RETRIEVE SENT TRANSACTIONS
 router.post('/retrieve-sent-hashes', function(req, res, next){
-  console.log('LOOK', req.body.address);
   Transaction.findAll({
     where : {
         sender : req.body.address.toLowerCase()
     },
-    attributes:['transactionHash', 'createdAt']
+    attributes:['transactionHash', 'createdAt'],
+    order: [['createdAt', 'DESC']]
   })
   .then((transactions, error)=>{
     const transArray = transactions.map((t)=>{
@@ -27,7 +28,8 @@ router.post('/retrieve-received-hashes', function(req, res, next){
     where : {
         receiver : req.body.address.toLowerCase()
     },
-    attributes:['transactionHash', 'createdAt']
+    attributes:['transactionHash', 'createdAt'],
+    order: [['createdAt', 'DESC']]
     })
     .then((transactions, error)=>{
         const transArray = transactions.map((t)=>{
