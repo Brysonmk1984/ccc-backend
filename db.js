@@ -2,10 +2,9 @@ const Sequelize = require('sequelize');
 const UserModel = require('./models/user.js');
 const TransactionModel = require('./models/transaction.js');
 
-let dbUrl;
 let db;
-// PRODUCTION
-if(process.env.NODE_ENV === 'production'){console.log('IN PROD');
+// PRODUCTION or Locally running backend through PROXY
+if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'proxy'){console.log('IN PROD');
   db = new Sequelize(process.env.SQL_DATABASE, 'brysonkruk', process.env.SQL_PASSWORD, {
     dialect: 'postgres',
     protocol: 'postgres',

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "eslint index.js && mocha",
     "start": "node index.js",
-    "start:proxy": "NODE_ENV=production node index.js"
+    "start:proxy": "NODE_ENV=proxy node index.js",
+    "start:prod": "NODE_ENV=production node index.js"
   },
   "author": "Bryson Kruk",
   "license": "MIT",
