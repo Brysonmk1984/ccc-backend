@@ -29,6 +29,11 @@ app.listen( process.env.PORT || 3001, function () {
     app.use(sessionStore);
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });
     require('./auth.js')(passport, LocalStrategy);
     
     // HTTP Routes
