@@ -21,7 +21,7 @@ app.listen( process.env.PORT || 3001, function () {
     console.log('Listening on port ' + (process.env.PORT || 3001));
     // Middleware
     //app.use(cors({credentials: true, origin: true}));
-    app.use(cors({credentials: true, origin: 'https://beta-dot-dcoin-web-app.appspot.com/'}));
+    app.use(cors({credentials: true, origin: 'https://beta-dot-dcoin-web-app.appspot.com'}));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(express.static(path.join(__dirname, 'public')));
