@@ -1,3 +1,4 @@
+service: betaapi
 runtime: nodejs8
 env: standard
 
