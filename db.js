@@ -20,8 +20,8 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'proxy'){co
   });
 
   // To connect with unix sockets, set the instance connection name found in the google cloud console
-  if(process.env.NODE_ENV === 'production' && process.env.INSTANCE_CONNECTION_NAME) {
-    sequelizeSettings.host = `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`;
+  if(process.env.NODE_ENV === 'proxy' && process.env.INSTANCE_CONNECTION_NAME) {
+    db.host = `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`;
   }
   
 // DEVELOPMENT
