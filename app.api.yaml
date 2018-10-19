@@ -24,6 +24,7 @@ env_variables:
   # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
   INSTANCE_CONNECTION_NAME: dcoin-web-app:us-central1:dcoin-user-db
 
+cloud_sql_instances: dcoin-web-app:us-central1:dcoin-user-db
 beta_settings:
   # The connection name of your instance, available by using
   # 'gcloud beta sql instances describe [INSTANCE_NAME]' or from
