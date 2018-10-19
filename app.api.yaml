@@ -1,7 +1,6 @@
 service: betaapi
 runtime: nodejs8
 env: standard
-threadsafe: true
 
 # This sample incurs costs to run on the App Engine flexible environment. 
 # The settings below are to reduce costs during testing and are not appropriate
@@ -24,7 +23,6 @@ env_variables:
   # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
   INSTANCE_CONNECTION_NAME: dcoin-web-app:us-central1:dcoin-user-db
 
-cloud_sql_instances: dcoin-web-app:us-central1:dcoin-user-db
 beta_settings:
   # The connection name of your instance, available by using
   # 'gcloud beta sql instances describe [INSTANCE_NAME]' or from
