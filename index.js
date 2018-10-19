@@ -18,6 +18,13 @@ const sessionStore = require('./store').sessionStore;
 
   // http server
 app.listen( process.env.PORT || 3001, function () {
+    console.log(
+      'ENV',
+      process.env.INSTANCE_CONNECTION_NAME,
+      process.env.SQL_DATABASE,
+      process.env.SQL_USER,
+      process.env.SQL_PASSWORD
+    );
     console.log('Listening on port ' + (process.env.PORT || 3001));
     // Middleware
     app.use(cors({credentials: true, origin: true}));
