@@ -29,8 +29,8 @@ beta_settings:
   # the Instance details page in the Google Cloud Platform Console.
   cloud_sql_instances: "dcoin-web-app:us-central1:dcoin-user-db"
 
-handlers:
-- url: /.*
-  script: index.js
+# handlers:
+# - url: /.*
+#   script: index.js
   # http_headers:
   #   Access-Control-Allow-Origin: "*"
