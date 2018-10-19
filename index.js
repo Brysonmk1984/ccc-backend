@@ -20,6 +20,7 @@ const sessionStore = require('./store').sessionStore;
 app.listen( process.env.PORT || 3001, function () {
     console.log(
       'ENV',
+      process.env.NODE_ENV,
       process.env.INSTANCE_CONNECTION_NAME,
       process.env.SQL_DATABASE,
       process.env.SQL_USER,
