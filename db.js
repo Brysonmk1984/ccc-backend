@@ -5,11 +5,12 @@ const TransactionModel = require('./models/transaction.js');
 let db;
 // PRODUCTION or Locally running backend through PROXY
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'proxy'){console.log('IN PROD');
-  db = new Sequelize(process.env.SQL_DATABASE, 'brysonkruk', process.env.SQL_PASSWORD, {
+  db = new Sequelize(process.env.SQL_DATABASE, process.env.SQL_USER, process.env.SQL_PASSWORD, {
     dialect: 'postgres',
     protocol: 'postgres',
     storage: "./session.postgres",
     operatorsAliases: false,
+    host: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`,
     //dialectOptions : { ssl: true },
     pool: {
       max: 5,
@@ -22,7 +23,7 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'proxy'){co
   // To connect with unix sockets, set the instance connection name found in the google cloud console
   //if(process.env.NODE_ENV === 'proxy' && process.env.INSTANCE_CONNECTION_NAME) {
     //db.host = `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`;
-    db.host = `/cloudsql/dcoin-web-app:us-central1:dcoin-user-db`;
+    //db.host = `/cloudsql/dcoin-web-app:us-central1:dcoin-user-db`;
   //}
   
 // DEVELOPMENT
