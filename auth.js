@@ -25,7 +25,7 @@ const auth = function(passport, LocalStrategy){
                 }
             });
         }else{
-            return done(error, null);
+            return done(error, false, {message : 'No Account found'});
         }
       })
       .error(function(error){
