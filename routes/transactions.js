@@ -14,11 +14,17 @@ router.post('/retrieve-sent-hashes', function(req, res, next){
     order: [['createdAt', 'DESC']]
   })
   .then((transactions, error)=>{
-    const transArray = transactions.map((t)=>{
+    const filteredTransactions = transactions.filter((t)=>{
+        if(!t.transactionHash){
+            console.log("Transaction hash is falsy...");
+        }
+        return t.transactionHash;
+    });
+    const transArray = filteredTransactions.map((t)=>{
         if(t.transactionHash){
             return {hash: t.transactionHash, timestamp: t.createdAt};
         }
-        console.log("Transaction hash is falsy...");
+        
     });
     res.status(200).send(transArray);
     next();

@@ -104,22 +104,23 @@ router.get('/logout', function(req, res){
 * Check the request if the user is authenticated.
 * Return an error message if not, otherwise keep going :)
 */
-router.use(function(req, res, next){
-  console.log('REQUSER -- ', req.user);
-  // isAuthenticated is set by `deserializeUser()`
-  if (!req.isAuthenticated || !req.isAuthenticated()) {
-      //console.log('BEFORE error', req.isAuthenticated());
-      res.status(401).send({
-      success: false,
-      message: 'You are not logged in',
-      requestType : 'GET'
-      });
-  }else{
-      next();
-  }
-});
+// router.use(function(req, res, next){
+//   console.log('REQUSER -- ', req.user);
+//   // isAuthenticated is set by `deserializeUser()`
+//   if (!req.isAuthenticated || !req.isAuthenticated()) {
+//       //console.log('BEFORE error', req.isAuthenticated());
+//       res.status(401).send({
+//       success: false,
+//       message: 'You are not logged in',
+//       requestType : 'GET'
+//       });
+//   }else{
+//       next();
+//   }
+// });
 
-router.get('/logged-in', function(req, res, next){console.log('@@@TESTETSTSTTETSTTETSTTETSTTSTTETTSTSTE');
+router.get('/logged-in', function(req, res, next){
+    console.log('@@@TESTETSTSTTETSTTETSTTETSTTSTTETTSTSTE');
   User.find({
     where : {
     email : req.user
