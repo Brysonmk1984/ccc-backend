@@ -4,6 +4,7 @@ const TransactionModel = require('./models/transaction.js');
 
 let db;
 // PRODUCTION or Locally running backend through PROXY
+console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'proxy'){
   db = new Sequelize(process.env.SQL_DATABASE, process.env.SQL_USER, process.env.SQL_PASSWORD, {
     dialect: 'postgres',

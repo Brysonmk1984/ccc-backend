@@ -18,13 +18,13 @@ router.post('/register', [
   const errors = validationResult(req);
   console.log('ERRORS!!', errors.array());
   if(!errors.isEmpty()){
-  res.json({ requestType : 'POST', success : false, error : errors.array() });
-  return;
+    res.json({ requestType : 'POST', success : false, error : errors.array() });
+    return;
   }
   User.create({
-      email : req.body.email,
-      password : req.body.password,
-      publicEthKey : req.body.publicEthKey,
+    email : req.body.email,
+    password : req.body.password,
+    publicEthKey : req.body.publicEthKey,
   })
   .then((user)=>{console.log('u2', user);
     req.login(user.id, function(err){
@@ -40,60 +40,59 @@ router.post('/register', [
 });
 
 // LOGIN TO EXISTING ACCOUNT
-router.post('/login', function(req, res, next){console.log('trying to log in');
+router.post('/login', function(req, res, next){
+  console.log('trying to log in');
   passport.authenticate('local',function(err, u, info){
-  store.get(req.sessionID, (err,sess)=>{
+    store.get(req.sessionID, (err,sess)=>{
       if(err){
-          console.log('Error retrieving session - ', err);
-          return res.json({
+        console.log('Error retrieving session - ', err);
+        return res.json({
           error: "Error retrieving session ",
           isAuthenticated : false,
           requestType : 'POST',
           success : false
-          });
+        });
       }
-  })
-  if (err) return next(err);
-  if (!u.email) {
+    })
+    if (err) return next(err);
+    if (!u.email) {
       console.log('No user found...');
       return res.json({
-          error: "No user found...",
-          isAuthenticated : false,
-          requestType : 'POST',
-          success : false
+        error: "No user found...",
+        isAuthenticated : false,
+        requestType : 'POST',
+        success : false
       });
-  }
-  // Manually establish the session...
-  req.login(u.email, function(err) {
+    }
+    // Manually establish the session...
+    req.login(u.email, function(err) {
       if (err) return next(err);
       User.find({
-          where : {
-          email : u.email
-          },
-          attributes:['publicEthKey']
+        where : {
+        email : u.email
+        },
+        attributes:['publicEthKey']
       }).then((user, err) => {
-          res.json({
-          sessionId : req.sessionID,
-          email : u.email,
-          publicEthKey : user.dataValues.publicEthKey,
-          isAuthenticated : true,
-          requestType : 'POST',
-          success : true
-          });
-          next();
+        res.json({
+        sessionId : req.sessionID,
+        email : u.email,
+        publicEthKey : user.dataValues.publicEthKey,
+        isAuthenticated : true,
+        requestType : 'POST',
+        success : true
+        });
+        next();
       });
-
-
-  });
+    });
   })(req, res, next);
 });
 router.get('/logout', function(req, res){
-  //console.log('sessid-1',req.sessionID);
+  console.log('sessid-1',req.sessionID);
   req.session.destroy(((err)=>{
-      if(err){
-          console.log('Error destroying session - ', err);
-          res.json({error : err, isAuthenticated : true, requestType : 'GET', success : false});
-      }
+    if(err){
+      console.log('Error destroying session - ', err);
+      res.json({error : err, isAuthenticated : true, requestType : 'GET', success : false});
+    }
   }));
   req.logout();
   res.json({isAuthenticated : false, requestType : 'GET', success : true});
@@ -120,22 +119,24 @@ router.get('/logout', function(req, res){
 // });
 
 router.get('/logged-in', function(req, res, next){
-    console.log('@@@TESTETSTSTTETSTTETSTTETSTTSTTETTSTSTE');
+  console.log('CHECKING IF LOGGED IN', req.user);
   User.find({
     where : {
     email : req.user
   },
   attributes:['publicEthKey']
   })
-  .then((user, error)=>{
+  .then((user, err)=>{
+    if (err) return next(err);
+      res.header('Access-Control-Allow-Credentials', 'true');
       res.status(200).send({
       success: true,
       message: `You are logged in as ${req.user}`,
       email: req.user,
       publicEthKey: user.dataValues.publicEthKey,
       requestType : 'GET'
-      });
-      next();
+    });
+    next();
   });
 });
 

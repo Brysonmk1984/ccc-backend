@@ -6,31 +6,31 @@ const auth = function(passport, LocalStrategy){
     usernameField:'email', passwordField:'password'
     },
     function(email, password, done) {
-        console.log('email', email, 'password', password);
+      console.log('email', email, 'password', password);
       User.find({
-          where : {
-              email
-          },
-          attributes:['id','email', 'password']
+        where : {
+          email
+        },
+        attributes:['id','email', 'password']
       })
       .then((user, error)=>{
         console.log('FOUND USER!', user);
         if(user){
-            bcrypt.compare(password, user.dataValues.password, function(err, isMatch){
-                if(err){console.log(err);}
-                if(isMatch){
-                    return done(null, user, {message : 'Match'});
-                } else {
-                    return done(null, false, {message : 'Password did not match'});
-                }
-            });
+          bcrypt.compare(password, user.dataValues.password, function(err, isMatch){
+            if(err){console.log(err);}
+            if(isMatch){
+              return done(null, user, {message : 'Match'});
+            }else{
+              return done(null, false, {message : 'Password did not match'});
+            }
+          });
         }else{
-            return done(error, false, {message : 'No Account found'});
+          return done(error, false, {message : 'No Account found'});
         }
       })
       .error(function(error){
-          console.log('ERROR - ',error);
-          return done(error, null);
+        console.log('ERROR - ',error);
+        return done(error, null);
       });
     }
   ));

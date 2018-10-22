@@ -20,24 +20,24 @@ const sessionStore = require('./store').sessionStore;
   // http server
 app.listen( process.env.PORT || 3001, function () {
     
-    console.log('Listening on port ' + (process.env.PORT || 3001));
-    // Middleware
-    // logger
-    app.use(morgan('dev'));
-    app.use(cors({credentials: true, origin: true}));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use(cookieParser('1123ddsgfdrtrthsds'));
-    app.set('trust proxy', 1);
-    app.use(sessionStore);
-    app.use(passport.initialize());
-    app.use(passport.session());
-    require('./auth.js')(passport, LocalStrategy);
-    
-    // HTTP Routes
-    app.use('/transactions', transactionRoutes);
-    app.use('/users', userRoutes);
+  console.log('Listening on port ' + (process.env.PORT || 3001));
+  // Middleware
+  // logger
+  app.use(morgan('dev'));
+  app.use(cors({credentials: true, origin: true}));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(cookieParser('1123ddsgfdrtrthsds'));
+  app.set('trust proxy', 1);
+  app.use(sessionStore);
+  app.use(passport.initialize());
+  app.use(passport.session());
+  require('./auth.js')(passport, LocalStrategy);
+  
+  // HTTP Routes
+  app.use('/transactions', transactionRoutes);
+  app.use('/users', userRoutes);
 });
 
 
