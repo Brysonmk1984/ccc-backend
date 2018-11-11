@@ -51,7 +51,8 @@ router.post('/read-balance', function(req, res, next){
       res.status(200).send(ethBalance);
       next();
     }else{console.log('Error retrieving Balance data',error);
-      next(error);
+      res.send(error);
+      next();
     }
   });
 });
