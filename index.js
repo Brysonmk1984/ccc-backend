@@ -25,7 +25,7 @@ app.listen( process.env.PORT || 3001, function () {
   // Middleware
   // logger
   app.use(morgan('dev'));
-  app.use(cors({credentials: true, origin: true}));
+  app.use(cors({credentials: true, origin: process.env.NODE_ENV === 'production' ? 'https://dcoin-web-app.appspot.com' : 'http://localhost:8080'}));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(express.static(path.join(__dirname, 'public')));
