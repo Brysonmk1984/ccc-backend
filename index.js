@@ -13,6 +13,7 @@ const LocalStrategy = require('passport-local').Strategy;
 // COMMON
 const transactionRoutes = require('./routes/transactions');
 const userRoutes = require('./routes/users');
+const web3Routes = require('./routes/web3');
 const sessionStore = require('./store').sessionStore;
 
 
@@ -38,6 +39,7 @@ app.listen( process.env.PORT || 3001, function () {
   // HTTP Routes
   app.use('/transactions', transactionRoutes);
   app.use('/users', userRoutes);
+  app.use('/web3', web3Routes);
 });
 
 
