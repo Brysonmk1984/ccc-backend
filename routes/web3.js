@@ -8,7 +8,7 @@ const web3js = new web3(new web3.providers.HttpProvider("http://35.237.222.172:8
 
 // POST - RETRIEVE TRANSACTION DATA OF SUPPLIED ARRAY FROM BLOCKCHAIN
 router.post('/retrieve-transaction-data', function(req, res, next){
-
+  const transArray = req.body.transArray;
   console.log('TD', transArray);
   const promiseArray = transArray.map((p, i)=>{
     if(i < 10){
@@ -30,9 +30,11 @@ router.post('/retrieve-transaction-data', function(req, res, next){
     // Was receiving undefined occasionally... need to look into this later
     // In the mean time, just don't show them
     const filteredArray = values.filter((v)=>{
-      return typeof v !== 'undefined';
+      if(v){
+        return v;
+      };
     });
-
+    console.log('FA', filteredArray);
     res.status(200).send(filteredArray);
     next();
   });
