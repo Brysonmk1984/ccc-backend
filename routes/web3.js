@@ -43,7 +43,7 @@ router.post('/retrieve-transaction-data', function(req, res, next){
 // POST - READ BALANCE FROM BLOCKCHAIN
 router.post('/read-balance', function(req, res, next){
   console.log('BODY',req.body.publicEthKey,req.body);
-  web3js.eth.getBalance(req.body.publicEthKey, (error, wei)=>{
+  web3js.eth.getBalance('0x895B758229aFF6C0f95146A676bBF579aD7636aa', (error, wei)=>{
     console.log('inside callback for getBalance, before conditional');
     if (!error) {console.log('bal');
       const weiBalance = web3.utils.toBN(wei);
