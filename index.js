@@ -25,7 +25,8 @@ app.listen( process.env.PORT || 3001, function () {
   // Middleware
   // logger
   app.use(morgan('dev'));
-  app.use(cors({credentials: true, origin: process.env.NODE_ENV === 'production' ? 'https://dcoin-web-app.appspot.com' : 'http://localhost:8080'}));
+  app.use(cors({credentials: true, origin: '*'}));
+  //app.use(cors({credentials: true, origin: process.env.NODE_ENV === 'production' ? 'https://dcoin-web-app.appspot.com' : 'http://localhost:8080'}));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(express.static(path.join(__dirname, 'public')));
@@ -36,7 +37,7 @@ app.listen( process.env.PORT || 3001, function () {
   app.use(passport.session());
   require('./auth.js')(passport, LocalStrategy);
   
-  app.options('*', cors())
+  //app.options('*', cors())
   // HTTP Routes
   app.use('/transactions', transactionRoutes);
   app.use('/users', userRoutes);

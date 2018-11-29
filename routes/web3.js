@@ -3,13 +3,12 @@ const express = require('express');
 const web3 = require('web3');
 const router = express.Router(); 
 
-const web3js = new web3(new web3.providers.HttpProvider("http://35.237.222.172:8111"));
+const web3js = new web3(new web3.providers.HttpProvider("http://52.15.122.19:8111"));
 
 
 // POST - RETRIEVE TRANSACTION DATA OF SUPPLIED ARRAY FROM BLOCKCHAIN
 router.post('/retrieve-transaction-data', function(req, res, next){
   const transArray = req.body.transArray;
-  console.log('TD', transArray);
   const promiseArray = transArray.map((p, i)=>{
     if(i < 10){
       return new Promise((resolve, reject)=>{
@@ -18,7 +17,6 @@ router.post('/retrieve-transaction-data', function(req, res, next){
             console.log('ERR', err);
             reject(err);
           }
-          console.log('TRANS DATA', data);
           resolve(data);
         });
       });
@@ -27,14 +25,11 @@ router.post('/retrieve-transaction-data', function(req, res, next){
 
   Promise.all(promiseArray)
   .then((values) =>{
-    // Was receiving undefined occasionally... need to look into this later
-    // In the mean time, just don't show them
     const filteredArray = values.filter((v)=>{
       if(v){
         return v;
       };
     });
-    console.log('FA', filteredArray);
     res.status(200).send(filteredArray);
     next();
   });
@@ -42,13 +37,10 @@ router.post('/retrieve-transaction-data', function(req, res, next){
 
 // POST - READ BALANCE FROM BLOCKCHAIN
 router.post('/read-balance', function(req, res, next){
-  console.log('BODY',req.body.publicEthKey,req.body);
   web3js.eth.getBalance(req.body.publicEthKey, (error, wei)=>{
-    console.log('inside callback for getBalance, before conditional');
-    if (!error) {console.log('bal');
+    if (!error) {
       const weiBalance = web3.utils.toBN(wei);
       const ethBalance = web3.utils.fromWei(weiBalance, 'ether');
-      console.log(ethBalance);
       res.status(200).send(ethBalance);
       next();
     }else{console.log('Error retrieving Balance data',error);
