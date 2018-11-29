@@ -37,7 +37,7 @@ const UserModel = function(db, DataTypes){
       }
     },
     publicEthKey : {
-      type : DataTypes.CHAR,
+      type : DataTypes.CHAR(42),
       //validate : { notEmpty :true }
     },
     // validPassword : function(password, passwd, done, user){
